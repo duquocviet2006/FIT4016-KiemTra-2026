@@ -1,0 +1,22 @@
+@model SchoolManagement.Models.Student
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Delete Student</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Are you sure you want to delete this student?</h5>
+        <p><strong>Full Name:</strong> @Model.FullName</p>
+        <p><strong>Student ID:</strong> @Model.StudentId</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>School:</strong> @Model.School?.Name</p>
+
+        <form method="post" asp-action="Delete">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="id" value="@Model.Id" />
+            <button type="submit" class="btn btn-danger">Delete</button>
+            <a class="btn btn-secondary" href="/Students">Cancel</a>
+        </form>
+    </div>
+</div>

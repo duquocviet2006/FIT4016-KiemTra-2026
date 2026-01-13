@@ -1,0 +1,70 @@
+@model SchoolManagement.Models.Student
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Create Student</h2>
+
+<form method="post">
+    @Html.AntiForgeryToken()
+    <div class="mb-3">
+        <label class="form-label">Full Name</label>
+        <input asp-for="FullName" class="form-control" />
+        <span class="text-danger">@Html.ValidationMessageFor(m => m.FullName)</span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Student ID</label>
+        <input asp-for="StudentId" class="form-control" />
+        <span class="text-danger">@Html.ValidationMessageFor(m => m.StudentId)</span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span class="text-danger">@Html.ValidationMessageFor(m => m.Email)</span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Phone</label>
+        <input asp-for="Phone" class="form-control" />
+        <span class="text-danger">@Html.ValidationMessageFor(m => m.Phone)</span>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">School</label>
+        <input type="text" id="schoolName" class="form-control" list="schoolsList" placeholder="Type or choose a school" />
+        <datalist id="schoolsList">
+            @foreach (var sch in ViewBag.Schools as List<SchoolManagement.Models.School>)
+            {
+                <option value="@sch.Name"></option>
+            }
+        </datalist>
+        <input type="hidden" asp-for="SchoolId" id="SchoolId" />
+        <span class="text-danger" id="schoolError">@Html.ValidationMessageFor(m => m.SchoolId)</span>
+    </div>
+
+    <script>
+        (function(){
+            var mapping = {};
+            var schools = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(ViewBag.Schools));
+            schools.forEach(function(s){ mapping[s.Name] = s.Id; });
+
+            var nameInput = document.getElementById('schoolName');
+            var idInput = document.getElementById('SchoolId');
+            var errSpan = document.getElementById('schoolError');
+
+            nameInput.addEventListener('input', function(){
+                var id = mapping[nameInput.value];
+                if (id) {
+                    idInput.value = id;
+                    errSpan.textContent = '';
+                } else {
+                    idInput.value = '';
+                }
+            });
+        })();
+    </script>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a class="btn btn-secondary" href="/Students">Back</a>
+</form>

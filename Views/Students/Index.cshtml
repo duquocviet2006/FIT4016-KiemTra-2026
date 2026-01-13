@@ -1,0 +1,50 @@
+@model IEnumerable<SchoolManagement.Models.Student>
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var current = ViewBag.CurrentPage ?? 1;
+    var total = ViewBag.TotalPages ?? 1;
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Students</h2>
+    <a class="btn btn-primary" href="/Students/Create">Create New Student</a>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Student ID</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>School</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var s in Model)
+    {
+        <tr>
+            <td>@s.FullName</td>
+            <td>@s.StudentId</td>
+            <td>@s.Email</td>
+            <td>@s.Phone</td>
+            <td>@s.School?.Name</td>
+            <td>
+                <a class="btn btn-sm btn-secondary" href="/Students/Edit/@s.Id">Edit</a>
+                <a class="btn btn-sm btn-danger" href="/Students/Delete/@s.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<nav>
+  <ul class="pagination">
+    @for (int p = 1; p <= total; p++)
+    {
+        <li class="page-item @(p == current ? "active" : "")">
+            <a class="page-link" href="/Students?page=@p">@p</a>
+        </li>
+    }
+  </ul>
+</nav>
